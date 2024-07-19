@@ -12,19 +12,20 @@ let instance: any;
 export const actions = {
   deploy: async ({ request }) => {
     const data = await request.formData();
-
-    const square = BigInt(Number(data.get("square")));
+    console.log("Hi Ayaan here!")
+    const square = BigInt(data.get("square") as string);
     instance = new Root(square);
     await instance.connect(signer);
-
+    console.log("done");
     try {
-      const deployTx = await instance.deploy(Number(data.get("bounty")));
+      const deployTx = await instance.deploy(parseInt(data.get("bounty") as string));
       console.log(
         "smart lock deployed : https://whatsonchain.com/tx/" + deployTx.id
       );
 
       return { success: true, txid: deployTx.id };
     } catch (error:any) {
+      console.log(error);
       return { success: false, txid: error.message };
     }
   },
